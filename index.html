@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="프랑스와요 와인 캘린더 — 부르고뉴·샹파뉴·보르도 산지 이슈, 경매·박람회, 한국 와인 시장, 프랑스 여행·공휴일">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍷</text></svg>">
+<title>FRANCE WAYO — 와인 캘린더</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Maitree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* 블랙앤화이트 + 와인 버건디 포인트
+     폰트: Maitree(francewayo.com 실측 세리프) + Noto Sans KR 본문 */
+  :root{
+    --bg:#FBFBFA; --card:#FFFFFF; --ink:#141414; --sub:#6B6B6B;
+    --line:rgba(20,20,20,.14); --line-soft:rgba(20,20,20,.07);
+    --point:#8E2637; --point-soft:rgba(142,38,55,.08);
+    --live:#8E2637; --live-bg:rgba(142,38,55,.1);
+    --dim:.45; --shadow:0 1px 2px rgba(20,20,20,.05),0 8px 28px rgba(20,20,20,.07);
+    --chip-on:#FFFFFF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0E0E0E; --card:#181818; --ink:#F2F0EC; --sub:#9C9C9C;
+      --line:rgba(242,240,236,.16); --line-soft:rgba(242,240,236,.07);
+      --point:#DB8593; --point-soft:rgba(219,133,147,.12);
+      --live:#DB8593; --live-bg:rgba(219,133,147,.13);
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 32px rgba(0,0,0,.35);
+      --chip-on:#141414;
+    }
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans KR","Apple SD Gothic Neo",-apple-system,"Malgun Gothic",sans-serif;
+    font-size:15px; line-height:1.68; -webkit-font-smoothing:antialiased;
+  }
+  .disp{font-family:"Maitree","Noto Serif KR",Georgia,serif; letter-spacing:-.005em; font-weight:600}
+  .mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums}
+
+  .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
+
+  header{padding:44px 0 30px; border-bottom:1px solid var(--ink)}
+  .byline{display:flex; align-items:center; gap:10px; margin-bottom:26px}
+  .byline .cap{font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--sub)}
+  .byline img{height:15px; width:auto; display:block; filter:invert(1)}
+  @media (prefers-color-scheme: dark){.byline img{filter:none}}
+  .eyebrow{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap;
+    font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--sub); margin-bottom:16px}
+  .eyebrow b{color:var(--point); font-weight:700}
+  h1{margin:0; font-weight:700; font-size:clamp(32px,6vw,56px); line-height:1.14; letter-spacing:-.01em; text-wrap:balance}
+  h1 .en{display:block; font-weight:600; font-size:.3em; letter-spacing:.2em; color:var(--sub); text-transform:uppercase; margin-bottom:12px}
+  .lede{margin:18px 0 0; max-width:660px; color:var(--sub); font-size:15px}
+
+  .now{margin:34px 0 0; border:1px solid var(--point); background:var(--point-soft); border-radius:2px; padding:22px 24px}
+  .now-tag{display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--point); font-weight:700; margin-bottom:10px}
+  .now-tag .pulse{width:8px;height:8px;border-radius:50%;background:var(--point);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  @media (prefers-reduced-motion: reduce){.now-tag .pulse{animation:none}}
+  .now h2{margin:0 0 6px; font-size:clamp(19px,3vw,26px); font-weight:700; line-height:1.35}
+  .now p{margin:0; color:var(--sub); font-size:14px; max-width:720px}
+  .now ul{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+  .now li{display:flex; gap:10px; align-items:baseline; font-size:14px}
+  .now li .d{flex:0 0 auto; font-size:12px; color:var(--point); font-weight:700; min-width:52px}
+
+  .radar{margin:26px 0 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px}
+  .radar-card{background:var(--card); border:1px solid var(--line-soft); border-radius:2px; padding:14px 16px; box-shadow:var(--shadow); border-top:2px solid var(--point)}
+  .radar-card .dd{font-size:11px; letter-spacing:.12em; font-weight:700; color:var(--point); text-transform:uppercase}
+  .radar-card .t{font-size:14.5px; font-weight:500; margin:3px 0 1px; line-height:1.4}
+  .radar-card .m{font-size:12.5px; color:var(--sub)}
+
+  .filters{position:sticky; top:0; z-index:5; background:var(--bg); padding:16px 0 14px; margin-top:40px;
+    border-bottom:1px solid var(--line-soft); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .chip{border:1px solid var(--line); background:transparent; color:var(--sub); border-radius:999px;
+    padding:5px 14px 6px; font-size:12.5px; font-family:inherit; cursor:pointer; letter-spacing:.02em; transition:all .15s}
+  .chip .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--point); margin-right:7px; vertical-align:1px}
+  .chip.on{background:var(--ink); border-color:var(--ink); color:var(--chip-on)}
+  .chip:focus-visible{outline:2px solid var(--point); outline-offset:2px}
+
+  .month{padding:44px 0 8px}
+  .month-head{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--ink); padding-bottom:12px; margin-bottom:22px}
+  .month-num{font-size:clamp(36px,5.4vw,52px); line-height:1; font-weight:700; color:var(--point)}
+  .month-meta .y{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--sub)}
+  .month-meta .theme{font-size:15px; font-weight:700; margin-top:2px}
+  .month-meta .theme .super{color:var(--point)}
+  .month-note{margin-left:auto; font-size:12.5px; color:var(--sub); max-width:380px; text-align:right}
+  @media (max-width:640px){.month-note{margin-left:0; text-align:left}}
+
+  .events{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px}
+  .empty-month{grid-column:1/-1; border:1px dashed var(--line); border-radius:2px; padding:18px 20px; color:var(--sub); font-size:13px; letter-spacing:.02em}
+  .ev{background:var(--card); border:1px solid var(--line-soft); border-left:3px solid var(--point); border-radius:2px;
+    padding:16px 18px 15px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:8px}
+  .ev.past{opacity:var(--dim)}
+  .ev.hidden{display:none}
+  .ev-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+  .ev-cat{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--point)}
+  .ev-dday{font-size:11px; font-weight:700; padding:2px 9px 3px; border-radius:999px; border:1px solid var(--line); color:var(--sub); white-space:nowrap}
+  .ev-dday.live{background:var(--live-bg); border-color:transparent; color:var(--live)}
+  .ev-dday.soon{background:var(--point-soft); border-color:transparent; color:var(--point)}
+  .ev h3{margin:0; font-size:17px; font-weight:500; line-height:1.4; letter-spacing:-.01em}
+  .ev .when{font-size:12.5px; color:var(--sub)}
+  .ev .when b{color:var(--ink); font-weight:500}
+  .ev .approx{font-size:10.5px; color:var(--sub); border:1px solid var(--line); border-radius:3px; padding:0 5px; margin-left:6px; letter-spacing:.05em}
+  .ev .angles{border-top:1px dashed var(--line); margin-top:4px; padding-top:9px; display:flex; flex-direction:column; gap:6px}
+  .ev .angle{font-size:12.8px; color:var(--sub); line-height:1.6}
+  .ev .angle b{font-weight:700; color:var(--ink); font-size:11px; letter-spacing:.1em; margin-right:5px}
+  .ev .angle.prep b{color:var(--point)}
+
+  .playbook{margin-top:70px; border-top:1px solid var(--ink); padding-top:34px}
+  .pb-eyebrow{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--point); font-weight:700}
+  .playbook h2{margin:8px 0 6px; font-weight:700; font-size:clamp(24px,3.6vw,34px); line-height:1.2}
+  .playbook > p{color:var(--sub); max-width:660px; margin:0 0 26px; font-size:14.5px}
+  .pb-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); gap:12px}
+  .pb{background:var(--card); border:1px solid var(--line-soft); border-top:2px solid var(--point); border-radius:2px; padding:18px; box-shadow:var(--shadow)}
+  .pb .d{font-size:13px; color:var(--point); font-weight:700; letter-spacing:.08em}
+  .pb .t{font-weight:700; font-size:14.5px; margin:6px 0 4px}
+  .pb p{margin:0; font-size:13px; color:var(--sub); line-height:1.6}
+
+  footer{margin-top:60px; padding-top:18px; border-top:1px solid var(--line-soft); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    font-size:11.5px; color:var(--sub); letter-spacing:.06em}
+  footer .brand{color:var(--point); font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="byline"><span class="cap">Calendar by</span><img src="https://jhkim-lgtm.github.io/industry-calendars/logo-1club.png" alt="1%CLUB"></div>
+    <div class="eyebrow">
+      <span><b>FRANCE WAYO</b>&nbsp; WINE &amp; FRANCE INTELLIGENCE</span>
+      <span id="today-label" class="mono"></span>
+    </div>
+    <h1 class="disp"><span class="en">Bourgogne · Champagne · Bordeaux · Paris</span>와인과 프랑스, 1년의 리듬</h1>
+    <p class="lede">프랑스 3대 산지의 수확·축제·경매부터 파리 박람회, 한국 와인 시장의 선물 시즌, 그리고 한국인이 프랑스로 향하는 여행·공휴일까지 한 캘린더에. 카드마다 콘텐츠 앵글과 준비 타이밍을 담았습니다.</p>
+
+    <div class="now">
+      <div class="now-tag"><span class="pulse"></span>이번 주 시의성 브리핑</div>
+      <h2 class="disp" id="now-title"></h2>
+      <p id="now-sub"></p>
+      <ul id="now-list"></ul>
+    </div>
+
+    <div class="radar" id="radar"></div>
+  </header>
+
+  <nav class="filters" id="filters" aria-label="카테고리 필터"></nav>
+
+  <main id="months"></main>
+
+  <section class="playbook">
+    <div class="pb-eyebrow">Operating Rhythm</div>
+    <h2 class="disp">콘텐츠·투어 운영 리듬</h2>
+    <p>와인의 1년은 수확·경매·해금이라는 고정된 절기로 돌아갑니다. 현장 콘텐츠는 섭외 리드타임이, 투어는 모객 리드타임이 승부처입니다.</p>
+    <div class="pb-grid">
+      <div class="pb"><div class="d">D-90</div><div class="t">투어 모객 · 섭외</div><p>와이너리 투어는 3개월 전 모객이 표준. 수확·경매 현장 취재 섭외도 이 시점에 확정한다.</p></div>
+      <div class="pb"><div class="d">D-30</div><div class="t">예열 콘텐츠</div><p>"이 산지가 왜 중요한가" 배경 영상 선발행 — 본편이 나올 때 검색·추천 유입이 붙는다.</p></div>
+      <div class="pb"><div class="d">D-DAY</div><div class="t">현장 기록</div><p>수확·경매·축제는 그날만 찍을 수 있다. 스틸·릴스 소스를 넉넉히 확보해 1년 내내 재활용.</p></div>
+      <div class="pb"><div class="d">D+7</div><div class="t">해설 & 커머스</div><p>결과 해설(낙찰가·빈티지 평가) 발행 + 직구·공동구매로 연결하는 구간.</p></div>
+      <div class="pb"><div class="d">비수기</div><div class="t">랜선 테이스팅</div><p>8월 바캉스·1~2월 겨울처럼 현장이 멈추는 시기엔 온라인 테이스팅과 아카이브 콘텐츠로 채운다.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Prepared by <span class="brand">1%CLUB</span> for 프랑스와요 — Wine &amp; France Intelligence</span>
+    <span>날짜는 각 주최측 공식 발표 기준 · <span class="mono">±</span> 표기는 예상 시기(공식 미발표) · 기준일 <span class="mono" id="foot-date"></span></span>
+  </footer>
+</div>
+
+<script>
+const CATS = {
+  terroir:{label:'산지 축제'},
+  trade:{label:'박람회·경매'},
+  harvest:{label:'수확·빈티지'},
+  korea:{label:'한국 와인 시장'},
+  travel:{label:'프랑스 여행·공휴일'},
+};
+
+/* approx:true = 공식 미발표, 예년 패턴 기반 예상 시기 */
+const EVENTS = [
+  // ── 2026.07 ──
+  {s:'2026-06-24', e:'2026-07-21', cat:'travel', title:'프랑스 여름 솔드 (Soldes d\'été)', place:'프랑스 전역', approx:true,
+   angle:'법정 세일 4주 — 파리 쇼핑 목적 방문객이 몰리는 구간. 와인숍·백화점 카브(라파예트·봉막쉐)도 이 시기 프로모션.',
+   prep:'파리 방문 시청자용 "솔드 기간 와인 쇼핑 가이드" 콘텐츠.'},
+  {s:'2026-07-04', e:'2026-07-26', cat:'travel', title:'투르 드 프랑스', place:'프랑스 전역', approx:true,
+   angle:'코스가 부르고뉴·보르도 등 와인 산지를 관통하는 해가 많다 — 포도밭 항공샷과 함께 산지 소개하기 좋은 시즌.',
+   prep:'통과 지역 발표 확인 후 해당 산지 콘텐츠 배치.'},
+  {s:'2026-07-14', e:'2026-07-14', cat:'travel', title:'혁명기념일 (Bastille Day)', place:'프랑스 전역',
+   angle:'파리 불꽃놀이·샹젤리제 퍼레이드 — 샴페인 소비가 튀는 날. "프랑스인은 국경일에 뭘 마시나" 앵글.',
+   prep:'—'},
+
+  // ── 2026.08 ──
+  {s:'2026-08-01', e:'2026-08-31', cat:'travel', title:'프랑스 바캉스 대이동 — 파리 비수기', place:'프랑스 전역',
+   angle:'파리지앵이 도시를 비우는 달. 관광객에겐 한산한 파리지만, **와이너리·레스토랑 상당수가 휴업**이라 방문 계획엔 함정.',
+   prep:'"8월에 프랑스 와이너리 가면 안 되는 이유" — 매년 반복 수요가 있는 실용 콘텐츠.'},
+  {s:'2026-08-15', e:'2026-08-15', cat:'travel', title:'성모승천일 (Assomption) — 공휴일', place:'프랑스 전역',
+   angle:'바캉스 절정의 공휴일. 이 주간은 현지 업무·배송 전면 정지.',
+   prep:'직구·발송 일정 사전 공지.'},
+  {s:'2026-08-24', e:'2026-09-20', cat:'harvest', title:'2026 빈티지 수확 개막 (샹파뉴·부르고뉴)', place:'샹파뉴 · 부르고뉴', approx:true,
+   angle:'기후 온난화로 8월 하순 개시가 표준이 된 수확 시즌. 수확 현장은 연중 가장 강력한 영상 소재 — 손 수확, 첫 압착, 도멘 식사.',
+   prep:'도멘 촬영 섭외는 6~7월에 마감. 수확일은 직전에야 확정되니 유연한 일정 확보.'},
+
+  // ── 2026.09 ──
+  {s:'2026-09-10', e:'2026-10-10', cat:'harvest', title:'2026 빈티지 수확 (보르도 · 론 · 루아르)', place:'보르도 · 발레 뒤 론',
+   angle:'메를로→카베르네 순으로 이어지는 보르도 수확. 빈티지 작황 평가가 이 시기 나온다 — "2026 빈티지 어떨까" 예측 콘텐츠.',
+   prep:'—'},
+  {s:'2026-09-19', e:'2026-09-20', cat:'travel', title:'유럽 문화유산의 날 (Journées du Patrimoine)', place:'프랑스 전역', approx:true,
+   angle:'평소 닫힌 샤토·도멘·카브가 무료 개방되는 주말 — 일반 여행자가 그랑크뤼 셀러에 들어갈 수 있는 드문 기회.',
+   prep:'개방 도멘 리스트는 8월 말 공개 — 리스트업 콘텐츠 선점.'},
+  {s:'2026-09-24', e:'2026-09-26', cat:'korea', title:'추석 — 한국 와인 선물 시즌', place:'한국',
+   angle:'명절 와인 선물세트 수요 피크. 백화점·마트 기획전과 맞물려 "명절 와인 추천" 검색이 폭증하는 구간.',
+   prep:'추천 리스트·공동구매는 D-3주(9월 초) 발행이 표준.'},
+
+  // ── 2026.10 ──
+  {s:'2026-10-03', e:'2026-10-04', cat:'terroir', title:'몽마르트 수확제 (Fête des Vendanges de Montmartre)', place:'파리 몽마르트', approx:true,
+   angle:'파리 한복판 포도밭(Clos Montmartre)의 수확 축제 — "파리에도 포도밭이 있다" 앵글은 조회수가 잘 나오는 소재.',
+   prep:'파리 체류 시청자 대상 현장 콘텐츠.'},
+  {s:'2026-10-03', e:'2026-10-03', cat:'travel', title:'파리 백야 축제 (Nuit Blanche)', place:'파리', approx:true,
+   angle:'밤새 열리는 예술 축제 — 파리 가을 여행 성수기의 상징적 주말.',
+   prep:'—'},
+  {s:'2026-10-12', e:'2026-11-13', cat:'korea', title:'연말 와인 시즌 준비 — 수입사 신제품·프로모션', place:'한국',
+   angle:'국내 수입사가 연말 라인업을 푸는 시기 — 신규 입고 와인 리뷰·비교 콘텐츠 수요.',
+   prep:'11~12월 공동구매·직구 물량은 이 시점에 확정.'},
+
+  // ── 2026.11 ──
+  {s:'2026-11-01', e:'2026-11-01', cat:'travel', title:'만성절 (Toussaint) — 공휴일', place:'프랑스 전역',
+   angle:'가을 방학 시즌. 도멘 방문 전 휴무 확인 필요.',
+   prep:'—'},
+  {s:'2026-11-14', e:'2026-11-16', cat:'trade', title:'레 트루아 글로리외즈 (Les Trois Glorieuses)', place:'부르고뉴 본 · 클로 드 부조 · 뫼르소',
+   angle:'부르고뉴 최대의 3일 — 토요일 클로 드 부조 기사단 만찬, 일요일 오스피스 경매, 월요일 뫼르소 폴레. 부르고뉴 와인계가 1년 중 가장 뜨거운 주말.',
+   prep:'현장 취재·투어 일정은 여름에 확정. 숙소는 1년 전 마감되는 구간.'},
+  {s:'2026-11-15', e:'2026-11-15', cat:'trade', title:'제166회 오스피스 드 본 경매', place:'부르고뉴 본 (Halles de Beaune)',
+   angle:'세계에서 가장 유명한 자선 와인 경매 — 낙찰가가 부르고뉴 빈티지 시세의 바로미터가 된다. 소더비 진행.',
+   prep:'경매 결과는 당일 밤 공개 — 낙찰가 해설 콘텐츠 즉시 대응.'},
+  {s:'2026-11-19', e:'2026-11-19', cat:'terroir', title:'보졸레 누보 해금 (Beaujolais Nouveau)', place:'보졸레 · 전 세계',
+   angle:'11월 셋째 목요일 0시 해금 — 연중 가장 대중적인 와인 이벤트. 전야 보죄(Beaujeu)의 사르망텔 축제까지 묶으면 현장감 있는 소재.',
+   prep:'한국 판매 시점과 맞물리니 D-2주부터 예열 콘텐츠.'},
+  {s:'2026-11-19', e:'2026-12-10', cat:'korea', title:'한국 보졸레 누보 시즌', place:'한국',
+   angle:'국내 유통사 동시 출시 — "올해 누보 어떤가" 리뷰 수요가 집중되는 3주.',
+   prep:'—'},
+
+  // ── 2026.12 ──
+  {s:'2026-12-01', e:'2026-12-24', cat:'travel', title:'프랑스 크리스마스 마켓 (스트라스부르 · 콜마르)', place:'알자스 · 전역',
+   angle:'알자스 크리스마스 마켓 = 뱅쇼와 리슬링의 계절. 겨울 프랑스 여행 최대 콘텐츠 소재.',
+   prep:'알자스 취재는 11월 초 예약 마감.'},
+  {s:'2026-12-11', e:'2026-12-13', cat:'terroir', title:'아비 드 뤼미에르 (Habits de Lumière)', place:'샹파뉴 에페르네', approx:true,
+   angle:'샴페인 애비뉴가 빛으로 뒤덮이는 축제 — 모엣·페리에 주에 등 메종이 문을 여는 주말.',
+   prep:'—'},
+  {s:'2026-12-01', e:'2026-12-31', cat:'korea', title:'한국 연말 와인 선물·파티 시즌', place:'한국',
+   angle:'샴페인·스파클링 수요 연중 최대. "연말 샴페인 가격대별 추천"은 매년 검증된 포맷.',
+   prep:'직구·공동구매 배송 마감일 역산 공지(12월 중순 마감).'},
+  {s:'2026-12-25', e:'2026-12-25', cat:'travel', title:'크리스마스 (Noël)', place:'프랑스 전역',
+   angle:'프랑스 가정의 크리스마스 식탁과 페어링 — 굴·푸아그라·샴페인 조합 콘텐츠.',
+   prep:'—'},
+
+  // ── 2027.01 ──
+  {s:'2027-01-06', e:'2027-02-02', cat:'travel', title:'프랑스 겨울 솔드 (Soldes d\'hiver)', place:'프랑스 전역',
+   angle:'1/6 시작 4주 법정 세일 — 겨울 파리 방문 시청자 대상 실용 정보.',
+   prep:'—'},
+  {s:'2027-01-11', e:'2027-01-27', cat:'trade', title:'밀레짐 비오 (Millésime Bio)', place:'몽펠리에', approx:true,
+   angle:'세계 최대 유기농·내추럴 와인 박람회 — 내추럴 와인 트렌드의 최전선.',
+   prep:'—'},
+  {s:'2027-01-30', e:'2027-01-31', cat:'terroir', title:'생 뱅상 투르낭트 2027 — 볼네 (제83회)', place:'부르고뉴 볼네',
+   angle:'매년 다른 마을이 돌아가며 여는 부르고뉴 최대 민속 와인 축제. 2027년은 인구 240명의 볼네 — **사상 처음으로 사전 등록 의무화**라 조기 안내가 중요.',
+   prep:'등록 오픈 시점 확인 후 시청자 안내 콘텐츠 — 투어 상품화 여지 큰 이벤트.'},
+
+  // ── 2027.02 ──
+  {s:'2027-02-06', e:'2027-02-07', cat:'terroir', title:'페르세 뒤 뱅 존 (Percée du Vin Jaune)', place:'쥐라', approx:true,
+   angle:'쥐라의 뱅 존 개봉 축제 — 사바냥·우이야주 없는 산화 숙성 등 마니아 소재의 보고.',
+   prep:'—'},
+  {s:'2027-02-06', e:'2027-02-09', cat:'korea', title:'설 연휴 — 한국 와인 선물 시즌', place:'한국',
+   angle:'명절 선물 수요 + 4일 연휴 홈파티 — 가격대별 선물 와인 추천 콘텐츠 피크.',
+   prep:'추천·공동구매는 1월 중순 발행.'},
+  {s:'2027-02-15', e:'2027-02-17', cat:'trade', title:'Wine Paris & Vinexpo Paris 2027', place:'파리 포르트 드 베르사유',
+   angle:'세계 와인 무역의 새 중심이 된 파리 박람회 — 전 세계 생산자와 바이어가 모이는 주간. 한국 수입사도 대거 방문.',
+   prep:'생산자 인터뷰·신규 수입 예정 와인 취재 최적. 미팅은 1월 중 확정.'},
+
+  // ── 2027.03 ──
+  {s:'2027-03-07', e:'2027-03-09', cat:'trade', title:'프로바인 뒤셀도르프 (ProWein) 2027', place:'뒤셀도르프',
+   angle:'유럽 최대 와인·주류 박람회 — 글로벌 트렌드와 신규 산지를 한 번에 훑는 자리.',
+   prep:'—'},
+  {s:'2027-03-28', e:'2027-03-29', cat:'travel', title:'부활절 (Pâques) — 3/29 월요일 공휴일', place:'프랑스 전역',
+   angle:'봄 시즌 개막 — 도멘 방문 시즌이 다시 열린다.',
+   prep:'봄 와이너리 투어 모객은 이 시점 마감.'},
+  {s:'2027-03-15', e:'2027-04-30', cat:'travel', title:'봄 프랑스 여행 시즌 개막', place:'프랑스 전역',
+   angle:'포도밭이 초록으로 바뀌는 계절 — 한국인 유럽 여행 예약이 가장 많이 잡히는 구간.',
+   prep:'—'},
+
+  // ── 2027.04 ──
+  {s:'2027-04-05', e:'2027-04-16', cat:'terroir', title:'르 프랭탕 데 샹파뉴 (Le Printemps des Champagnes)', place:'샹파뉴', approx:true,
+   angle:'레콜탕(자가 재배 소규모 생산자)들이 신작 뱅 클레르를 여는 주간 — 그로스 메종 밖 샹파뉴의 진짜 얼굴.',
+   prep:'초청제 성격 — 생산자 컨택은 겨울에.'},
+  {s:'2027-04-11', e:'2027-04-14', cat:'trade', title:'비니탈리 (Vinitaly) 2027', place:'이탈리아 베로나',
+   angle:'이탈리아 최대 와인 박람회 — 프랑스 채널이지만 비교 관점 콘텐츠로 확장 가능.',
+   prep:'—'},
+  {s:'2027-04-19', e:'2027-04-23', cat:'trade', title:'보르도 엉 프리뫼르 위크 (2026 빈티지)', place:'보르도', approx:true,
+   angle:'통 안의 미완성 와인을 평가해 선물 거래하는 세계 유일의 시장 — 2026 빈티지 평가와 가격 발표가 이어진다.',
+   prep:'"엉 프리뫼르가 뭔가"는 매년 재활용 가능한 설명 콘텐츠. 시음 결과는 4월 말~6월 릴리즈로 이어짐.'},
+
+  // ── 2027.05 ──
+  {s:'2027-05-01', e:'2027-05-17', cat:'travel', title:'5월 공휴일 러시 (노동절·종전일·승천일·성령강림)', place:'프랑스 전역',
+   angle:'5/1 · 5/8 · 5/6(승천) · 5/17(성령강림 월) — 프랑스가 사실상 쉬는 달. "퐁(pont)" 연휴로 업무가 멈춘다.',
+   prep:'도멘 방문·배송 일정 회피 안내 필수.'},
+  {s:'2027-05-01', e:'2027-05-09', cat:'korea', title:'가정의 달 — 선물 와인 시즌', place:'한국',
+   angle:'어버이날 선물 와인 수요 — 부담 없는 가격대 추천이 통하는 구간.',
+   prep:'—'},
+  {s:'2027-05-23', e:'2027-06-13', cat:'travel', title:'롤랑가로스 (프랑스 오픈)', place:'파리', approx:true,
+   angle:'파리 초여름의 상징 — 샴페인 스폰서십(모엣) 앵글로 연결 가능.',
+   prep:'—'},
+
+  // ── 2027.06 ──
+  {s:'2027-06-16', e:'2027-06-20', cat:'korea', title:'서울국제주류&와인박람회 (SIWSE)', place:'서울 코엑스', approx:true,
+   angle:'국내 최장수 주류 박람회 — 한국 시청자와 오프라인으로 만나는 접점. 매년 6월 중순 개최.',
+   prep:'참가·강연 협의는 4월 중.'},
+  {s:'2027-06-21', e:'2027-06-21', cat:'travel', title:'음악 축제 (Fête de la Musique)', place:'프랑스 전역',
+   angle:'하지의 밤, 거리 전체가 무대가 되는 날 — 여름 파리의 시작.',
+   prep:'—'},
+  {s:'2027-06-23', e:'2027-07-20', cat:'travel', title:'프랑스 여름 솔드 (Soldes d\'été)', place:'프랑스 전역',
+   angle:'6/23 시작 4주 법정 세일.',
+   prep:'—'},
+  {s:'2027-06-25', e:'2027-07-25', cat:'travel', title:'프로방스 라벤더 시즌', place:'프로방스 발랑솔', approx:true,
+   angle:'라벤더 밭 만개 — 남프랑스 로제 와인과 함께 묶기 좋은 연중 최고 비주얼 시즌.',
+   prep:'개화는 기후에 따라 변동 — 6월 중순 현지 확인.'},
+
+  // ── 2027.07 ──
+  {s:'2027-07-03', e:'2027-07-25', cat:'travel', title:'투르 드 프랑스', place:'프랑스 전역', approx:true,
+   angle:'와인 산지를 관통하는 구간 콘텐츠.',
+   prep:'—'},
+  {s:'2027-07-14', e:'2027-07-14', cat:'travel', title:'혁명기념일 (Bastille Day)', place:'프랑스 전역',
+   angle:'파리 불꽃놀이와 샴페인.',
+   prep:'—'},
+  {s:'2027-07-19', e:'2027-08-20', cat:'korea', title:'한국 여름휴가 — 유럽 여행 피크', place:'한국 → 프랑스',
+   angle:'한국인 프랑스 방문 최대 구간 — 파리·부르고뉴 여행 실용 정보 수요가 가장 높은 시기.',
+   prep:'여행 가이드 콘텐츠는 5~6월 발행이 검색 유입에 유리.'},
+
+  // ── 2027.08 ──
+  {s:'2027-08-01', e:'2027-08-31', cat:'travel', title:'프랑스 바캉스 대이동 — 파리 비수기', place:'프랑스 전역',
+   angle:'와이너리·레스토랑 휴업 시즌. 방문 계획의 최대 함정.',
+   prep:'—'},
+  {s:'2027-08-15', e:'2027-08-15', cat:'travel', title:'성모승천일 — 공휴일', place:'프랑스 전역',
+   angle:'바캉스 절정 공휴일.',
+   prep:'—'},
+  {s:'2027-08-23', e:'2027-09-19', cat:'harvest', title:'2027 빈티지 수확 개막 (샹파뉴·부르고뉴)', place:'샹파뉴 · 부르고뉴', approx:true,
+   angle:'연중 최강 영상 소재 — 손 수확·첫 압착·도멘 식사.',
+   prep:'도멘 섭외는 6~7월 마감.'},
+
+  // ── 2027.09 ──
+  {s:'2027-09-09', e:'2027-10-09', cat:'harvest', title:'2027 빈티지 수확 (보르도 · 론 · 루아르)', place:'보르도 · 발레 뒤 론', approx:true,
+   angle:'빈티지 작황 평가 시즌.',
+   prep:'—'},
+  {s:'2027-09-14', e:'2027-09-16', cat:'korea', title:'추석 — 한국 와인 선물 시즌', place:'한국',
+   angle:'명절 선물세트 수요 피크(추석 9/15).',
+   prep:'추천 콘텐츠는 8월 말 발행.'},
+  {s:'2027-09-18', e:'2027-09-19', cat:'travel', title:'유럽 문화유산의 날', place:'프랑스 전역', approx:true,
+   angle:'샤토·도멘 무료 개방 주말.',
+   prep:'—'},
+
+  // ── 2027.10 ──
+  {s:'2027-10-02', e:'2027-10-03', cat:'terroir', title:'몽마르트 수확제', place:'파리 몽마르트', approx:true,
+   angle:'파리 도심 포도밭 수확 축제.',
+   prep:'—'},
+  {s:'2027-10-11', e:'2027-11-12', cat:'korea', title:'연말 와인 시즌 준비 — 수입사 신제품', place:'한국',
+   angle:'연말 라인업 공개 — 신규 입고 리뷰 수요.',
+   prep:'공동구매 물량 확정 시점.'},
+
+  // ── 2027.11 ──
+  {s:'2027-11-01', e:'2027-11-01', cat:'travel', title:'만성절 — 공휴일', place:'프랑스 전역',
+   angle:'가을 방학 시즌.',
+   prep:'—'},
+  {s:'2027-11-18', e:'2027-11-18', cat:'terroir', title:'보졸레 누보 해금', place:'보졸레 · 전 세계',
+   angle:'11월 셋째 목요일 해금 — 연중 가장 대중적인 와인 이벤트.',
+   prep:'D-2주 예열.'},
+  {s:'2027-11-20', e:'2027-11-22', cat:'trade', title:'레 트루아 글로리외즈 + 제167회 오스피스 드 본 경매', place:'부르고뉴 본',
+   angle:'셋째 일요일 경매(11/21) 중심의 3일 — 부르고뉴 시세의 바로미터.',
+   prep:'숙소·취재 일정은 1년 전 확보.'},
+
+  // ── 2027.12 ──
+  {s:'2027-12-01', e:'2027-12-24', cat:'travel', title:'프랑스 크리스마스 마켓', place:'알자스 · 전역',
+   angle:'뱅쇼와 리슬링의 계절.',
+   prep:'—'},
+  {s:'2027-12-01', e:'2027-12-31', cat:'korea', title:'한국 연말 와인 선물·파티 시즌', place:'한국',
+   angle:'샴페인 수요 연중 최대.',
+   prep:'배송 마감일 역산 공지.'},
+  {s:'2027-12-10', e:'2027-12-12', cat:'terroir', title:'아비 드 뤼미에르 (에페르네)', place:'샹파뉴 에페르네', approx:true,
+   angle:'샴페인 애비뉴 빛 축제.',
+   prep:'—'},
+];
+
+const MONTH_THEMES = {
+  '2026-07':{theme:'여름 솔드 & 투르 드 프랑스'},
+  '2026-08':{theme:'바캉스 — 프랑스가 멈추는 달', note:'와이너리 휴업 시즌. 대신 수확이 시작된다.'},
+  '2026-09':{theme:'수확(Vendanges) 시즌', super:true, note:'연중 최강의 현장 콘텐츠 구간.'},
+  '2026-10':{theme:'수확 마무리 & 파리의 가을'},
+  '2026-11':{theme:'부르고뉴 슈퍼먼스 — 경매 × 누보', super:true, note:'트루아 글로리외즈와 보졸레 누보가 한 달에.'},
+  '2026-12':{theme:'연말 샴페인 시즌', super:true},
+  '2027-01':{theme:'생 뱅상 투르낭트 & 겨울 솔드', super:true},
+  '2027-02':{theme:'Wine Paris — 무역의 달', super:true},
+  '2027-03':{theme:'프로바인 & 봄 시즌 개막'},
+  '2027-04':{theme:'엉 프리뫼르 & 샹파뉴의 봄', super:true},
+  '2027-05':{theme:'공휴일 러시 — 프랑스가 쉬는 달', note:'퐁 연휴로 업무 정지. 방문·배송 일정 주의.'},
+  '2027-06':{theme:'서울 박람회 & 여름 개막'},
+  '2027-07':{theme:'한국 여름휴가 — 프랑스 방문 피크', super:true},
+  '2027-08':{theme:'바캉스 & 수확 개막'},
+  '2027-09':{theme:'수확 시즌 × 추석', super:true},
+  '2027-10':{theme:'파리의 가을'},
+  '2027-11':{theme:'부르고뉴 슈퍼먼스 — 경매 × 누보', super:true},
+  '2027-12':{theme:'연말 샴페인 시즌', super:true},
+};
+
+/* ── 내 일정: 이 브라우저(localStorage)에만 저장되는 개인 일정 ── */
+CATS.custom={label:'내 일정', color:'var(--point)'};
+const CUSTOM_KEY='onecal_custom_'+location.pathname;
+let CUSTOM=[];
+try{CUSTOM=JSON.parse(localStorage.getItem(CUSTOM_KEY)||'[]')}catch(e){CUSTOM=[]}
+CUSTOM.forEach(c=>{if(c&&c.s&&c.title)EVENTS.push({s:c.s,e:c.e||c.s,cat:'custom',title:c.title,place:c.place||'',angle:c.memo||'직접 추가한 일정',prep:'—',sales:'—'});});
+
+const $=s=>document.querySelector(s);
+const fmt=(d)=>`${d.getMonth()+1}/${d.getDate()}`;
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c);};
+const today=new Date(); today.setHours(0,0,0,0);
+const DAY=86400000;
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+/* 롤링 윈도우: 이번 달 1일 ~ 내년 12월 31일, 전 개월 표시 */
+const winStart=new Date(today.getFullYear(), today.getMonth(), 1);
+const winEnd=new Date(today.getFullYear()+1, 11, 31);
+const visible=EVENTS.filter(ev=>parse(ev.e)>=winStart && parse(ev.s)<=winEnd);
+
+const dateLabel=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+$('#today-label').textContent = `${dateLabel} 기준`;
+$('#foot-date').textContent = dateLabel;
+
+function status(ev){
+  const s=parse(ev.s), e=parse(ev.e);
+  if(today>e) return {k:'past'};
+  if(today>=s) return {k:'live', label:'LIVE'};
+  const d=Math.round((s-today)/DAY);
+  return {k:d<=30?'soon':'future', label:`D-${d}`, d};
+}
+
+(function(){
+  const active=visible.map(ev=>({ev,st:status(ev)})).filter(x=>x.st.k==='live'||(x.st.k!=='past'&&x.st.d<=10));
+  const list=$('#now-list');
+  if(active.length===0){
+    $('#now-title').textContent='조용한 주간 — 준비의 시간';
+    $('#now-sub').textContent='이번 주 임박한 대형 이벤트는 없습니다. 아래 레이더의 다가오는 이벤트를 미리 준비하세요.';
+  }else{
+    const live=active.filter(x=>x.st.k==='live').length;
+    $('#now-title').textContent = live>0 ? '지금 진행 중인 시즌' : '이번 주, 준비할 것들';
+    $('#now-sub').textContent='진행 중이거나 10일 안에 시작되는 이벤트입니다. 판매·콘텐츠·현장 운영 준비를 점검하세요.';
+    active.sort((a,b)=>parse(a.ev.s)-parse(b.ev.s)).forEach(({ev,st})=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span class="d mono">${st.label}</span><span><b>${ev.title}</b> · ${fmt(parse(ev.s))}–${fmt(parse(ev.e))} ${ev.place}</span>`;
+      list.appendChild(li);
+    });
+  }
+})();
+
+(function(){
+  const up=visible.map(ev=>({ev,st:status(ev)})).filter(x=>x.st.k==='soon'||x.st.k==='future')
+    .sort((a,b)=>parse(a.ev.s)-parse(b.ev.s)).slice(0,4);
+  const radar=$('#radar');
+  up.forEach(({ev,st})=>{
+    const c=document.createElement('div'); c.className='radar-card';
+    c.innerHTML=`<div class="dd mono">${st.label} · ${CATS[ev.cat].label}</div>
+      <div class="t">${ev.title}</div>
+      <div class="m">${fmt(parse(ev.s))}–${fmt(parse(ev.e))} · ${ev.place}</div>`;
+    radar.appendChild(c);
+  });
+})();
+
+(function(){
+  const f=$('#filters');
+  const mk=(key,label,dot)=>{
+    const b=document.createElement('button'); b.className='chip'+(key==='all'?' on':''); b.dataset.cat=key;
+    b.innerHTML=(dot?'<span class="dot"></span>':'')+label;
+    b.addEventListener('click',()=>{
+      f.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===key));
+      document.querySelectorAll('.ev').forEach(el=>el.classList.toggle('hidden',key!=='all'&&el.dataset.cat!==key));
+      document.querySelectorAll('.month').forEach(m=>{
+        const any=[...m.querySelectorAll('.ev')].some(el=>!el.classList.contains('hidden'));
+        m.style.display=(key==='all'||any)?'':'none';
+      });
+    });
+    f.appendChild(b);
+  };
+  mk('all','전체 보기',false);
+  Object.entries(CATS).forEach(([k,v])=>mk(k,v.label,true));
+})();
+
+(function(){
+  const byMonth={};
+  const winStartKey=`${winStart.getFullYear()}-${String(winStart.getMonth()+1).padStart(2,'0')}`;
+  visible.forEach(ev=>{
+    let key=ev.s.slice(0,7);
+    if(key<winStartKey) key=winStartKey;
+    (byMonth[key]=byMonth[key]||[]).push(ev);
+  });
+  const root=$('#months');
+  const allKeys=[];
+  for(let d=new Date(winStart); d<=winEnd; d=new Date(d.getFullYear(), d.getMonth()+1, 1)){
+    allKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+  }
+  allKeys.forEach(key=>{
+    const [y,m]=key.split('-').map(Number);
+    const meta=MONTH_THEMES[key]||{theme:''};
+    const sec=document.createElement('section'); sec.className='month';
+    sec.innerHTML=`<div class="month-head">
+        <div class="month-num disp">${String(m).padStart(2,'0')}</div>
+        <div class="month-meta">
+          <div class="y mono">${MONTH_NAMES[m-1]} ${y}</div>
+          <div class="theme">${meta.super?'<span class="super">◆ </span>':''}${meta.theme||''}</div>
+        </div>
+        ${meta.note?`<div class="month-note">${meta.note}</div>`:''}
+      </div>
+      <div class="events"></div>`;
+    const grid=sec.querySelector('.events');
+    const evs=byMonth[key]||[];
+    if(evs.length===0){
+      grid.innerHTML='<div class="empty-month">이 달은 예정된 대형 이벤트가 없습니다 — 다음 시즌을 준비하는 구간.</div>';
+    }
+    evs.sort((a,b)=>parse(a.s)-parse(b.s)).forEach(ev=>{
+      const st=status(ev);
+      const card=document.createElement('article');
+      card.className='ev'+(st.k==='past'?' past':'');
+      card.dataset.cat=ev.cat;
+      const dday= st.k==='past' ? `<span class="ev-dday">종료</span>`
+        : st.k==='live' ? `<span class="ev-dday live">● LIVE</span>`
+        : `<span class="ev-dday ${st.k==='soon'?'soon':''} mono">${st.label}</span>`;
+      const sd=parse(ev.s), ed=parse(ev.e);
+      const range = ev.s===ev.e ? fmt(sd) : `${fmt(sd)} – ${fmt(ed)}`;
+      card.innerHTML=`
+        <div class="ev-top"><span class="ev-cat">${CATS[ev.cat].label}</span>${dday}</div>
+        <h3>${ev.title}</h3>
+        <div class="when"><b class="mono">${range}</b> · ${ev.place}${ev.approx?'<span class="approx">± 예상 시기</span>':''}</div>
+        <div class="angles">
+          <div class="angle"><b>CONTENT</b>${ev.angle}</div>
+          ${ev.prep&&ev.prep!=='—'?`<div class="angle prep"><b>PREP</b>${ev.prep}</div>`:''}
+        </div>`;
+      grid.appendChild(card);
+    });
+    root.appendChild(sec);
+  });
+})();
+
+/* ── 내 일정 추가 UI ── */
+(function(){
+  const A=`var(--acc, var(--point, var(--gold, var(--bronze))))`;
+  const st=document.createElement('style');
+  st.textContent=`
+  .addev-fab{position:fixed;right:20px;bottom:20px;z-index:50;border:none;border-radius:999px;padding:12px 18px;font-size:13.5px;font-weight:700;font-family:inherit;color:#fff;background:${A};box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer}
+  .addev-ov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px}
+  .addev-ov.open{display:flex}
+  .addev-md{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;max-width:430px;width:100%;max-height:85vh;overflow:auto;padding:22px}
+  .addev-md h3{margin:0 0 4px;font-size:17px}
+  .addev-md .hint{font-size:12px;color:var(--sub);margin:0 0 14px}
+  .addev-md label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);margin:10px 0 4px;letter-spacing:.06em}
+  .addev-md input,.addev-md textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);padding:8px 10px;font-size:14px;font-family:inherit}
+  .addev-row{display:flex;gap:10px}.addev-row>div{flex:1}
+  .addev-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+  .addev-actions button{border-radius:4px;padding:8px 16px;font-size:13.5px;font-family:inherit;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--sub)}
+  .addev-actions .pri{background:${A};border-color:transparent;color:#fff;font-weight:700}
+  .addev-list{margin:0 0 6px;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+  .addev-list li{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:13px;border:1px solid var(--line-soft);border-radius:4px;padding:6px 10px}
+  .addev-list .del{border:none;background:none;color:var(--sub);cursor:pointer;font-size:12px;text-decoration:underline;font-family:inherit}`;
+  document.head.appendChild(st);
+
+  const ov=document.createElement('div'); ov.className='addev-ov';
+  ov.innerHTML=`<div class="addev-md" role="dialog" aria-modal="true">
+    <h3>내 일정</h3>
+    <p class="hint">이 브라우저(기기)에만 저장됩니다. 캘린더 본문에 D-day와 함께 표시돼요.</p>
+    <ul class="addev-list" id="addev-list"></ul>
+    <label>제목 *</label><input id="ae-title" type="text" maxlength="60">
+    <div class="addev-row">
+      <div><label>시작일 *</label><input id="ae-s" type="date"></div>
+      <div><label>종료일 (선택)</label><input id="ae-e" type="date"></div>
+    </div>
+    <label>장소 (선택)</label><input id="ae-place" type="text" maxlength="40">
+    <label>메모 (선택)</label><textarea id="ae-memo" rows="2" maxlength="140"></textarea>
+    <div class="addev-actions">
+      <button type="button" id="ae-close">닫기</button>
+      <button type="button" class="pri" id="ae-save">저장</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+
+  const btn=document.createElement('button'); btn.className='addev-fab'; btn.type='button'; btn.textContent='＋ 내 일정 추가';
+  document.body.appendChild(btn);
+
+  function renderList(){
+    const ul=ov.querySelector('#addev-list'); ul.innerHTML='';
+    CUSTOM.forEach((c,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span><b>${c.title}</b> · ${c.s}${c.e&&c.e!==c.s?'–'+c.e:''}</span>`;
+      const del=document.createElement('button'); del.className='del'; del.textContent='삭제';
+      del.addEventListener('click',()=>{CUSTOM.splice(i,1);localStorage.setItem(CUSTOM_KEY,JSON.stringify(CUSTOM));location.reload();});
+      li.appendChild(del); ul.appendChild(li);
+    });
+  }
+  btn.addEventListener('click',()=>{renderList();ov.classList.add('open');});
+  ov.querySelector('#ae-close').addEventListener('click',()=>ov.classList.remove('open'));
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelector('#ae-save').addEventListener('click',()=>{
+    const t=ov.querySelector('#ae-title').value.trim(), s=ov.querySelector('#ae-s').value;
+    if(!t||!s){alert('제목과 시작일을 입력해 주세요.');return;}
+    const e=ov.querySelector('#ae-e').value;
+    CUSTOM.push({title:t,s:s,e:(e&&e>=s)?e:s,place:ov.querySelector('#ae-place').value.trim(),memo:ov.querySelector('#ae-memo').value.trim()});
+    localStorage.setItem(CUSTOM_KEY,JSON.stringify(CUSTOM));
+    location.reload();
+  });
+})();
+
+</script>
+</body>
+</html>
