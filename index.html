@@ -610,6 +610,66 @@ function status(ev){
   });
 })();
 
+
+/* ── 출력용 보기 (인쇄·PDF 저장) ── */
+(function(){
+  var st=document.createElement('style');
+  st.textContent=`
+  .print-toggle{position:fixed;right:20px;bottom:72px;z-index:50;border:1px solid var(--line);border-radius:999px;
+    padding:10px 16px;font-size:13px;font-weight:600;font-family:inherit;background:var(--card);color:var(--ink);
+    box-shadow:0 4px 14px rgba(0,0,0,.18);cursor:pointer}
+  .print-toggle:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+  .print-bar{position:fixed;top:0;left:0;right:0;z-index:70;display:none;align-items:center;gap:12px;
+    justify-content:center;flex-wrap:wrap;padding:9px 16px;background:#141414;color:#fff;font-size:12.5px;letter-spacing:.02em}
+  .print-bar button{border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:999px;
+    padding:4px 13px;font-size:12.5px;font-family:inherit;cursor:pointer}
+  .print-bar .pri{background:#fff;color:#141414;border-color:#fff;font-weight:700}
+  body.printview .print-bar{display:flex}
+  body.printview{--bg:#fff;--card:#fff;--ink:#111;--sub:#4a4a4a;--line:rgba(0,0,0,.24);--line-soft:rgba(0,0,0,.12);
+    --shadow:none;background:#fff;color:#111;font-size:12.5px;padding-top:40px}
+  body.printview .wrap{max-width:1180px;padding:0 16px 28px}
+  body.printview header{padding:16px 0 12px}
+  body.printview .byline{margin-bottom:12px}
+  body.printview .lede,body.printview .now p,body.printview .playbook>p{display:none}
+  body.printview .now{padding:12px 15px;margin-top:14px}
+  body.printview .now ul{margin-top:8px}
+  body.printview .radar{gap:8px;margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  body.printview .radar-card{padding:9px 11px}
+  body.printview .month{padding:16px 0 4px}
+  body.printview .month-head{padding-bottom:6px;margin-bottom:10px}
+  body.printview .events{grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:8px}
+  body.printview .ev{padding:9px 11px;gap:5px;border:1px solid rgba(0,0,0,.2);box-shadow:none;border-radius:2px}
+  body.printview .ev h3{font-size:13.5px}
+  body.printview .ev .angles{padding-top:6px;gap:4px}
+  body.printview .ev .angle{font-size:11px;line-height:1.45}
+  body.printview .playbook{margin-top:26px;padding-top:16px}
+  body.printview .pb{padding:11px}
+  body.printview .filters,body.printview .addev-fab,body.printview .print-toggle{display:none}
+  body.printview .month,body.printview .ev,body.printview .playbook,body.printview .now{break-inside:avoid;page-break-inside:avoid}
+  @media print{
+    .filters,.addev-fab,.print-toggle,.print-bar,.addev-ov{display:none!important}
+    body{padding-top:0!important;background:#fff!important;color:#111!important}
+    .month,.ev,.playbook,.now,.pb{break-inside:avoid;page-break-inside:avoid}
+    a{text-decoration:none;color:inherit}
+    @page{size:A4 landscape;margin:10mm}
+  }`;
+  document.head.appendChild(st);
+
+  var bar=document.createElement('div'); bar.className='print-bar';
+  bar.innerHTML='<span>출력용 보기 — 이 화면 그대로 인쇄하거나 PDF로 저장하세요 (A4 가로 권장)</span>';
+  var bp=document.createElement('button'); bp.type='button'; bp.className='pri'; bp.textContent='인쇄 · PDF 저장';
+  var be=document.createElement('button'); be.type='button'; be.textContent='원래대로';
+  bar.appendChild(bp); bar.appendChild(be);
+  document.body.appendChild(bar);
+
+  var tg=document.createElement('button'); tg.type='button'; tg.className='print-toggle'; tg.textContent='🖨 출력용 보기';
+  document.body.appendChild(tg);
+
+  tg.addEventListener('click',function(){document.body.classList.add('printview');window.scrollTo(0,0);});
+  be.addEventListener('click',function(){document.body.classList.remove('printview');});
+  bp.addEventListener('click',function(){window.print();});
+})();
+
 </script>
 </body>
 </html>
